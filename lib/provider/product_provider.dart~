@@ -1,0 +1,59 @@
+import 'package:flutter/foundation.dart';
+import 'package:patch_assessment/constants/api_constants.dart';
+import 'package:patch_assessment/models/products_model.dart';
+import 'package:patch_assessment/utils/network_helper.dart';
+
+class ProductProvider extends ChangeNotifier {
+  List<ProductModel> _products = [];
+  bool _isLoading = false;
+  String? _error;
+
+  List<ProductModel> get products => _products;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  Future<void> fetchProducts() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      const fullUrl =
+          '${ApiEndpoints.mainEndpoint}${ApiEndpoints.productsEndpoint}';
+      final responseData =
+          await NetworkHelper.get(url: fullUrl);
+      _products = (responseData as List)
+          .map((productJson) =>
+              ProductModel.fromJson(productJson))
+          .toList();
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      // Handle any errors
+      _isLoading = false;
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  List<String> get categories => _products
+      .map((product) => product.category)
+      .toSet()
+      .toList();
+  
+  List<ProductModel> getProductsByCategory(String category) {
+    return products.where((product) => product.category == category).toList();
+  }
+
+  List<ProductModel> sortProducts(
+      List<ProductModel> products,
+      bool isLowestPriceFirst
+      ) {
+    var sortedProducts = List<ProductModel>.from(products);
+    sortedProducts.sort((a, b) => isLowestPriceFirst
+        ? a.price.compareTo(b.price)
+        : b.price.compareTo(a.price));
+    return sortedProducts;
+  }
+
+}
