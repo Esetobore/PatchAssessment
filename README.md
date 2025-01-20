@@ -1,7 +1,7 @@
-# Patch Assessment Flutter App
+# Patch Flutter App
 
 ## Overview
-Patch Assessment is a Flutter mobile application that provides a comprehensive product browsing experience with features like category filtering and product listings.
+Patch is a Flutter mobile application that provides a comprehensive product browsing experience with features like category filtering and product listings.
 
 ## Prerequisites
 - Flutter SDK (version 3.5.4 or higher)
@@ -11,7 +11,7 @@ Patch Assessment is a Flutter mobile application that provides a comprehensive p
 
 ## Project Structure
 ```
-patch_assessment/
+patch/
 │
 ├── assets/
 │   └── images/
